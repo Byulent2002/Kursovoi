@@ -1,0 +1,85 @@
+from telethon import TelegramClient
+from telethon.errors import SessionPasswordNeededError
+import os
+import time
+
+def clear_console():
+    if os.name in ('nt', 'dos'): #Check OS name for using correct command
+        try:
+            os.system("cls")
+        except:
+            pass
+    else:
+        try:
+            os.system("clear")
+        except:
+            pass
+
+def change_title():
+    if os.name in ('nt', 'dos'):
+        try:
+            os.system('title "DociTeam | Telegram Spambot"')
+        except:
+            pass
+    else:
+            pass
+
+
+clear_console()
+change_title()
+
+class color : 
+    Red = '\033[91m'
+    Green = '\033[92m'
+    Blue = '\033[94m'
+    Cyan = '\033[96m'
+    White = '\033[97m'
+    Yellow = '\033[93m'
+    Magenta = '\033[95m'
+    Grey = '\033[90m'
+    Black = '\033[90m'
+    Default = '\033[99m'
+
+dociteam = color.Cyan+"""
+                                    | /  |   
+                                    |/   | _____  
+                                    |\   |   |   
+                                    | \  |   |  221
+"""
+def slowprint(text: str, speed: float, newLine=True):
+    for i in text:
+        print(i, end="", flush=True)
+        time.sleep(speed)
+    if newLine:
+        print()
+
+print(dociteam)
+time.sleep(2)
+slowprint(color.Yellow+f"\n\n|---------- Ласкаво просимо до {color.Blue}Telegram {color.Red}SpamBot{color.Yellow}! ----------|\n",0.07)
+slowprint(color.Yellow+"[!] Виконав Власов Бюлент КІт-221\n",0.07)
+
+API_ID = int(input(color.Yellow+"[+] Введіть ваш API_ID : "+color.White))
+API_HASH = str(input(color.Yellow+"[+] Введіть ваш API_HASH : "+color.White))
+PHONE = str(input(color.Yellow+"[+] Введіть свій номер телефону з кодом країни ( +12345...) : "+color.White))
+TARGET = str(input(color.Yellow+"[+] Введіть номер телефону або ідентифікатор цілі або посилання для групового запрошення : "+color.White)) #ID Ex : @dociteam
+MESSAGE = str(input(color.Yellow+"[+] Введіть своє повідомлення : "+color.White))
+COUNTER = int(input(color.Yellow+"[+] Скільки повідомлень ви хочете надіслати? : "+color.White))
+
+client = TelegramClient('session',API_ID, API_HASH)
+client.start()
+print(color.Green+"[+] Давайте розпочнемо...\n")
+
+async def main():
+    if not await client.is_user_authorized():
+        await client.send_code_request(PHONE)
+        try:
+            await client.sign_in(PHONE, input(color.Yellow+'[+] Введіть код : '))
+        except SessionPasswordNeededError:
+            await client.sign_in(password=input(color.Yellow+'[+] Пароль : '))
+    for i in range(1,int(COUNTER) + 1):
+        await client.send_message(TARGET, MESSAGE)
+        print(color.Green+"[+] Повідомлення надіслано!\n")
+    input(color.Green+'\nНатисніть Enter, щоб вийти........')
+
+with client:
+    client.loop.run_until_complete(main())
