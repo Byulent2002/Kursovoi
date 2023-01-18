@@ -1,0 +1,140 @@
+print('Starting...')                                                                                                                                                                              
+import os
+import requests
+os.system('cls')
+
+
+import time
+import threading
+import sys
+
+try:
+    os.system('pip install colorama >nul && cls')
+    import colorama
+except:
+    import colorama
+
+def set_title():
+  title = "Discord Webhook Spammer"
+  try:
+    os.system(f"title {title}")
+  except:
+    os.system(f"title {title}")
+
+threading.Thread(target=set_title).start()
+
+def print015(text):
+    for c in text:
+        sys.stdout.write(c)
+        sys.stdout.flush()
+        time.sleep(0.015)
+    sys.stdout.write("\n")
+
+def print01(text):
+    for c in text:
+        sys.stdout.write(c)
+        sys.stdout.flush()
+        time.sleep(0.015)
+
+def webhook_spammer():
+    colorama.init(autoreset=True)
+    while True:
+        try:
+            sys.stdout.write(colorama.Fore.CYAN + "> ")
+            print01("Enter Webhook: ")
+            webhook = input("")
+            r_check = requests.get(webhook)
+            r_check = str(r_check)
+            if "200" in r_check:
+                break
+            if "200" not in r_check:
+                sys.stdout.write(colorama.Fore.RED + "> ")
+                print015("Webhook Invalid, Please Enter A Valid One")
+        except Exception:
+                sys.stdout.write(colorama.Fore.RED + "> ")
+                print015("Webhook Invalid, Please Enter A Valid One")
+    sys.stdout.write(colorama.Fore.CYAN + "> ")
+    print01("Enter Message: ")
+    content = input("")
+    while True:
+        sys.stdout.write(colorama.Fore.CYAN + "> ")
+        print01("Want An Avatar (y/n): ")
+        avatar_y_n = input("")
+        if avatar_y_n == "n" or avatar_y_n == "y":
+            break
+        else:
+            sys.stdout.write(colorama.Fore.CYAN + "> ")
+            print015("Enter A Valid Choice")
+    if avatar_y_n == "y":
+        while True:
+            sys.stdout.write(colorama.Fore.CYAN + "> ")
+            print01("Enter Avatar Url: ")
+            avatar_url = input("")
+            if "http://" in avatar_url or "https://" in avatar_url:
+                break
+            else:
+                sys.stdout.write(colorama.Fore.CYAN + "> ")
+                print015("Enter A Valid Choice")
+    if avatar_y_n == "n":
+        avatar_url = ""
+    sys.stdout.write(colorama.Fore.CYAN + "> ")
+    print01("Enter Bot Username: ")
+    username = input("")
+    while True:
+        sys.stdout.write(colorama.Fore.CYAN + "> ")
+        print01("Enter Limit (i for infinity): ")
+        limit = input("")
+        if limit == "i" or limit == "I":
+            break
+        try:
+            limit = int(limit)
+            break
+        except Exception:
+            sys.stdout.write(colorama.Fore.CYAN + "> ")
+            print015("Enter A Valid Choice")
+    while True:
+        try:
+            sys.stdout.write(colorama.Fore.CYAN + "> ")
+            print01("Enter Delay (0 For None): ")
+            delay = input("")
+            delay = float(delay)
+            break
+        except:
+            sys.stdout.write(colorama.Fore.CYAN + "> ")
+            print015("Enter A Valid Choice")
+    if limit == "i" or limit == "I":
+        limit = str(limit)
+        
+    den = 0
+    if limit == "i" or limit == "I":
+        while True:
+            r = requests.post(webhook, json={"avatar_url": avatar_url, "username": username, "content": content})
+            r = str(r)
+            if "204" in r:
+                den = int(den) + 1
+                print(f"{colorama.Fore.CYAN}[{colorama.Fore.RESET}{str(den)}{colorama.Fore.CYAN}/{colorama.Fore.RESET}INFINITY{colorama.Fore.CYAN}]{colorama.Fore.RESET} Sent Message To The {colorama.Fore.CYAN}Webhook")
+            if "429" in r:
+                print(f"{colorama.Fore.RED}[{colorama.Fore.RESET}ERROR{colorama.Fore.RED}]{colorama.Fore.RESET} Rate Limited, {colorama.Fore.RED}Retrying")
+
+
+
+    for u in range(int(limit)):
+        while True:
+            r = requests.post(webhook, json={"avatar_url": avatar_url, "username": username, "content": content})
+            r = str(r)
+            if "204" in r:
+                den = int(den) + 1
+                print(f"{colorama.Fore.CYAN}[{colorama.Fore.RESET}{str(den)}{colorama.Fore.CYAN}/{colorama.Fore.RESET}{str(limit)}{colorama.Fore.CYAN}]{colorama.Fore.RESET} Sent Message To The {colorama.Fore.CYAN}Webhook")
+                break
+            if "429" in r:
+                print(f"{colorama.Fore.RED}[{colorama.Fore.RESET}ERROR{colorama.Fore.RED}]{colorama.Fore.RESET} Rate Limited, {colorama.Fore.RED}Retrying")
+
+
+    sys.stdout.write(colorama.Fore.CYAN + "> ")
+    print01("Done Spamming Webhook, Press Enter To Close The Program")
+    input("")
+    exit()
+
+
+
+webhook_spammer()
